@@ -563,11 +563,8 @@ class TestOperators(TestCase):
         skip("nn.functional.feature_alpha_dropout", "with_train"),  # calls random op
         skip("nn.functional.fractional_max_pool2d"),  # calls random op
         skip("nn.functional.fractional_max_pool3d"),  # calls random op
+        skip("nn.functional.gaussian_nll_loss"),  # takes too long
         skip('nn.functional._scaled_dot_product_attention'),  # randomness
-        # It looks like you're either (1) calling .item() on a Tensor or
-        # (2) attempting to use a Tensor in some data-dependent control flow or
-        # (3) encountering this error in PyTorch internals.
-        xfail("nn.functional.gaussian_nll_loss"),
         # got a batched tensor as input while the running_mean or running_var,
         # which will be updated in place, were not batched.
         xfail("nn.functional.instance_norm"),
@@ -688,7 +685,6 @@ class TestOperators(TestCase):
         xfail('linalg.eig'),  # Uses aten::allclose
         xfail('linalg.householder_product'),  # needs select_scatter
         xfail('nanquantile', device_type='cpu'),  # checks q via a .item() call
-        xfail('nn.functional.gaussian_nll_loss'),  # checks var for if any value < 0
         xfail('narrow'),  # .item() call
         xfail('quantile', device_type='cpu'),  # checks q via a .item() call
         xfail('view_as_complex'),  # Tensor must have a last dimension with stride 1
@@ -1036,7 +1032,6 @@ class TestOperators(TestCase):
         xfail('__getitem__', ''),
         xfail('index_put', ''),
         xfail('view_as_complex'),
-        xfail('nn.functional.gaussian_nll_loss'),
         xfail('masked_select'),
         xfail('narrow'),  # Batching rule not implemented for `narrow.Tensor` (and view op)
         skip('nn.functional.fractional_max_pool3d'),  # generator works on cpu, fails on cuda
