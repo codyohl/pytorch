@@ -5,7 +5,6 @@
 #include <c10/util/Exception.h>
 #include <c10/util/intrusive_ptr.h>
 
-#include <numeric>
 #include <memory>
 #include <numeric>
 
@@ -85,6 +84,13 @@ class C10_API SymInt {
       if (s.is_symbolic())
         s.data_ = 0;
     };
+    return *this;
+  }
+
+  SymInt clone() const {
+    if (is_symbolic()) {
+      return toSymIntNodeImplUnowned()->clone()->toSymInt();
+    }
     return *this;
   }
 
