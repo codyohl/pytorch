@@ -87,6 +87,13 @@ class C10_API SymInt {
     return *this;
   }
 
+  SymInt clone() const {
+    if (is_symbolic()) {
+      return toSymIntNodeImplUnowned()->clone()->toSymInt();
+    }
+    return *this;
+  }
+
 #ifndef C10_MOBILE
   SymIntNodeImpl* toSymIntNodeImplUnowned() const {
     uint64_t unextended_bits = static_cast<uint64_t>(data_) & ~MASK;
